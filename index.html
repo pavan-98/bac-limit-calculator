@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BAC Calculator - India Legal Limit</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
@@ -71,18 +72,29 @@
           <!-- Beer Category -->
           <div class="alcohol-category">
             <h3><i class="fas fa-beer"></i> Beer</h3>
+            
+            <!-- Beer Strength Selector -->
+            <div class="beer-strength-selector">
+              <label for="beerStrength">Beer Strength:</label>
+              <select id="beerStrength" onchange="updateBeerStrength()">
+                <option value="light">Light Beer (3.5% ABV)</option>
+                <option value="regular" selected>Regular Beer (5% ABV)</option>
+                <option value="strong">Strong Beer (7% ABV)</option>
+              </select>
+            </div>
+            
             <div class="drink-options">
               <div class="drink-option">
                 <div class="drink-info">
-                  <span class="drink-name">Pint Beer</span>
-                  <span class="drink-volume">(568ml, 5% ABV)</span>
+                  <span class="drink-name">Small Beer</span>
+                  <span class="drink-volume" id="small-volume">(330ml, 5% ABV)</span>
                 </div>
                 <div class="counter">
-                  <button class="counter-btn" onclick="decrementDrink('pint')">
+                  <button class="counter-btn" onclick="decrementDrink('small')">
                     -
                   </button>
-                  <span class="counter-value" id="pint-count">0</span>
-                  <button class="counter-btn" onclick="incrementDrink('pint')">
+                  <span class="counter-value" id="small-count">0</span>
+                  <button class="counter-btn" onclick="incrementDrink('small')">
                     +
                   </button>
                 </div>
@@ -91,7 +103,7 @@
               <div class="drink-option">
                 <div class="drink-info">
                   <span class="drink-name">Full Beer</span>
-                  <span class="drink-volume">(650ml, 5% ABV)</span>
+                  <span class="drink-volume" id="full-volume">(650ml, 5% ABV)</span>
                 </div>
                 <div class="counter">
                   <button class="counter-btn" onclick="decrementDrink('full')">
@@ -107,7 +119,7 @@
               <div class="drink-option">
                 <div class="drink-info">
                   <span class="drink-name">Pitcher</span>
-                  <span class="drink-volume">(1.5L, 5% ABV)</span>
+                  <span class="drink-volume" id="pitcher-volume">(1.5L, 5% ABV)</span>
                 </div>
                 <div class="counter">
                   <button
@@ -130,7 +142,9 @@
 
           <!-- Spirits Category -->
           <div class="alcohol-category">
-            <h3><i class="fas fa-glass-whiskey"></i> Whiskey/Vodka</h3>
+            <h3>
+              <i class="fas fa-glass-whiskey"></i> Whiskey/Vodka/Rum/Brandy
+            </h3>
             <div class="drink-options">
               <div class="drink-option">
                 <div class="drink-info">

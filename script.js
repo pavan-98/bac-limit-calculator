@@ -2,10 +2,19 @@
 const ALCOHOL_ELIMINATION_RATE = 0.015; // BAC reduction per hour
 const INDIA_LEGAL_LIMIT = 0.03; // 0.03% BAC legal limit in India
 
+// Beer strength options
+const BEER_STRENGTHS = {
+    light: 0.035,    // 3.5% ABV
+    regular: 0.05,   // 5% ABV  
+    strong: 0.07     // 7% ABV
+};
+
+let currentBeerStrength = 'regular';
+
 // Drink definitions with alcohol content
 const DRINKS = {
-    // Beer category (ml, ABV%)
-    pint: { volume: 568, abv: 0.05 },
+    // Beer category (ml, ABV%) - ABV will be updated based on beer strength
+    small: { volume: 330, abv: 0.05 },
     full: { volume: 650, abv: 0.05 },
     pitcher: { volume: 1500, abv: 0.05 },
     
@@ -29,6 +38,25 @@ const BODY_WATER_RATIO = {
     male: 0.68,
     female: 0.55
 };
+
+// Update beer strength and display
+function updateBeerStrength() {
+    const beerStrengthSelect = document.getElementById('beerStrength');
+    currentBeerStrength = beerStrengthSelect.value;
+    
+    const selectedABV = BEER_STRENGTHS[currentBeerStrength];
+    const abvPercentage = (selectedABV * 100).toFixed(1);
+    
+    // Update beer drinks ABV
+    DRINKS.small.abv = selectedABV;
+    DRINKS.full.abv = selectedABV;
+    DRINKS.pitcher.abv = selectedABV;
+    
+    // Update display text
+    document.getElementById('small-volume').textContent = `(330ml, ${abvPercentage}% ABV)`;
+    document.getElementById('full-volume').textContent = `(650ml, ${abvPercentage}% ABV)`;
+    document.getElementById('pitcher-volume').textContent = `(1.5L, ${abvPercentage}% ABV)`;
+}
 
 // Increment drink counter
 function incrementDrink(drinkType) {
@@ -228,6 +256,9 @@ function resetCalculator() {
     document.getElementById('weight').value = '';
     document.getElementById('gender').value = '';
     document.getElementById('hours').value = '';
+    document.getElementById('beerStrength').value = 'regular';
+    currentBeerStrength = 'regular';
+    updateBeerStrength();
     document.getElementById('results').style.display = 'none';
 }
 
@@ -268,6 +299,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('BAC Calculator initialized');
     console.log('India Legal Limit: ' + INDIA_LEGAL_LIMIT + '%');
     
+    // Initialize beer strength display
+    updateBeerStrength();
+    
     // Add reset button (optional)
     const resetBtn = document.createElement('button');
     resetBtn.textContent = '🔄 Reset Calculator';
@@ -292,7 +326,9 @@ if (typeof module !== 'undefined' && module.exports) {
         calculateWidmarkBAC,
         calculateSoberTime,
         getLegalStatus,
+        updateBeerStrength,
         DRINKS,
+        BEER_STRENGTHS,
         INDIA_LEGAL_LIMIT
     };
 }

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="whiskey" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b4513;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Glass outline -->
+  <path d="M8 28 L24 28 L22 8 L10 8 Z" fill="url(#glass)" stroke="#495057" stroke-width="1"/>
+  
+  <!-- Whiskey liquid -->
+  <path d="M9 24 L23 24 L21.5 12 L10.5 12 Z" fill="url(#whiskey)"/>
+  
+  <!-- Glass rim -->
+  <ellipse cx="16" cy="8" rx="6" ry="1" fill="#495057"/>
+  
+  <!-- Glass base -->
+  <ellipse cx="16" cy="28" rx="8" ry="1" fill="#adb5bd"/>
+  
+  <!-- Highlight on glass -->
+  <path d="M11 10 L12 24 L13 24 L12 10 Z" fill="#ffffff" opacity="0.3"/>
+</svg>

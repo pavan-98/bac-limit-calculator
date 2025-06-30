@@ -157,6 +157,46 @@ body {
   margin-right: 10px;
 }
 
+/* Beer Strength Selector */
+.beer-strength-selector {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 15px;
+  border: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.beer-strength-selector label {
+  font-weight: 600;
+  color: #2d3748;
+  margin-right: 15px;
+  font-size: 1rem;
+}
+
+.beer-strength-selector select {
+  padding: 10px 16px;
+  border: 2px solid #667eea;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  color: #2d3748;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.beer-strength-selector select:focus {
+  outline: none;
+  border-color: #5a67d8;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.beer-strength-selector select:hover {
+  border-color: #5a67d8;
+}
+
+/* Drink Options Styles */
 .drink-options {
   display: grid;
   gap: 15px;
