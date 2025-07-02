@@ -276,13 +276,24 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Add input validation
-document.getElementById('weight').addEventListener('input', function(e) {
+// Save weight and gender to localStorage on change
+const weightInput = document.getElementById('weight');
+const genderInput = document.getElementById('gender');
+
+weightInput.addEventListener('input', function(e) {
     const value = parseFloat(e.target.value);
     if (value < 30 || value > 200) {
         e.target.style.borderColor = '#ff6b6b';
     } else {
         e.target.style.borderColor = '#e2e8f0';
     }
+    // Save to localStorage
+    localStorage.setItem('userWeight', e.target.value);
+});
+
+genderInput.addEventListener('change', function(e) {
+    // Save to localStorage
+    localStorage.setItem('userGender', e.target.value);
 });
 
 document.getElementById('hours').addEventListener('input', function(e) {
@@ -295,12 +306,21 @@ document.getElementById('hours').addEventListener('input', function(e) {
 });
 
 // Initialize on page load
+// Restore weight and gender from localStorage if available
 document.addEventListener('DOMContentLoaded', function() {
     console.log('BAC Calculator initialized');
     console.log('India Legal Limit: ' + INDIA_LEGAL_LIMIT + '%');
     
     // Initialize beer strength display
     updateBeerStrength();
+    
+    // Restore weight and gender from localStorage if available
+    if (localStorage.getItem('userWeight')) {
+        weightInput.value = localStorage.getItem('userWeight');
+    }
+    if (localStorage.getItem('userGender')) {
+        genderInput.value = localStorage.getItem('userGender');
+    }
     
     // Add reset button (optional)
     const resetBtn = document.createElement('button');

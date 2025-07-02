@@ -423,6 +423,14 @@ body {
   color: #2d3748;
 }
 
+/* Footer Styles */
+.footer {
+  text-align: center;
+  color: #ffffff;
+  font-size: 0.95em;
+  margin: 30px 0 10px 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
