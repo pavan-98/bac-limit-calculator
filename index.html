@@ -2,366 +2,330 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BAC Calculator - India Legal Drinking Limit</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0d12" />
+    <title>Can I Drive? — BAC Calculator India</title>
+    <meta
+      name="description"
+      content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
+    />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <meta
-      property="og:title"
-      content="BAC Calculator - India Legal Drinking Limit"
-    />
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <meta property="og:title" content="Can I Drive? — BAC Calculator India" />
     <meta
       property="og:description"
-      content="Visually calculate your Blood Alcohol Content (BAC) and understand your legal limits in India. Stay safe and informed."
+      content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
     />
     <meta property="og:image" content="breath.jpg" />
     <meta property="og:url" content="https://bac-calculator-rho.vercel.app/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="BAC Calculator - India Legal Drinking Limit"
-    />
+    <meta name="twitter:title" content="Can I Drive? — BAC Calculator India" />
     <meta
       name="twitter:description"
-      content="Visually calculate your Blood Alcohol Content (BAC) and understand your legal limits in India. Stay safe and informed."
+      content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
     />
-    <meta name="twitter:image" content="phone_app.jpeg" />
+    <meta name="twitter:image" content="breath.jpg" />
   </head>
   <body>
-    <div class="container">
-      <header class="header">
-        <div class="header-content">
-          <h1><i class="fas fa-scale-balanced"></i> BAC Calculator</h1>
-          <p class="subtitle">Blood Alcohol Content Calculator for India</p>
-          <div class="legal-limit">
-            <span class="limit-label">Legal Limit:</span>
-            <span class="limit-value">0.03% BAC</span>
-          </div>
-        </div>
-      </header>
+    <a class="skip-link" href="#drinks">Skip to drinks</a>
 
-      <main class="main-content">
-        <!-- Personal Information Section -->
-        <section class="section">
-          <h2><i class="fas fa-user"></i> Personal Information</h2>
-          <div class="form-group">
-            <div class="input-group">
-              <label for="weight">Weight (kg)</label>
+    <header class="topbar">
+      <div class="brand">
+        <img src="favicon.svg" alt="" width="28" height="28" />
+        <span>Can I Drive?</span>
+      </div>
+      <span class="limit-pill" title="India legal limit: 30 mg per 100 ml blood"
+        >India limit <strong>0.03%</strong></span
+      >
+    </header>
+
+    <main class="app">
+      <!-- The answer. Always at the top. -->
+      <section
+        id="result"
+        class="hero"
+        data-state="needProfile"
+        aria-live="polite"
+        aria-atomic="true"
+        tabindex="-1"
+      ></section>
+
+      <!-- Step 1: About you -->
+      <section class="card" id="profile" aria-labelledby="profile-title">
+        <div class="step-head">
+          <span class="step-num" aria-hidden="true">1</span>
+          <h2 id="profile-title">About you</h2>
+        </div>
+
+        <div class="profile-summary" id="profile-summary" hidden>
+          <span id="profile-summary-text"></span>
+          <button type="button" class="btn-link" id="edit-profile">
+            Change
+          </button>
+        </div>
+
+        <div class="profile-form" id="profile-form">
+          <label class="field-label" for="weight">Your weight</label>
+          <div class="stepper">
+            <button
+              type="button"
+              class="step-btn"
+              data-weight-step="-1"
+              aria-label="Decrease weight by 1 kilogram"
+            >
+              −
+            </button>
+            <div class="stepper-value">
               <input
-                type="number"
                 id="weight"
-                placeholder="Enter your weight"
+                type="number"
+                inputmode="decimal"
                 min="30"
                 max="200"
+                step="1"
+                placeholder="70"
+                autocomplete="off"
+                aria-describedby="weight-error"
               />
+              <span class="unit" aria-hidden="true">kg</span>
             </div>
-            <div class="input-group">
-              <label for="gender">Gender</label>
-              <select id="gender">
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-            <div class="input-group">
-              <label for="hours">Hours since first drink</label>
-              <input
-                type="number"
-                id="hours"
-                placeholder="Hours"
-                min="0"
-                max="24"
-                step="0.5"
-              />
-            </div>
+            <button
+              type="button"
+              class="step-btn"
+              data-weight-step="1"
+              aria-label="Increase weight by 1 kilogram"
+            >
+              +
+            </button>
           </div>
-        </section>
+          <p class="field-error" id="weight-error" hidden>
+            Enter a weight between 30 and 200 kg
+          </p>
 
-        <!-- Alcohol Consumption Section -->
-        <section class="section">
-          <h2><i class="fas fa-wine-glass-alt"></i> Alcohol Consumption</h2>
-
-          <!-- Beer Category -->
-          <div class="alcohol-category">
-            <h3><i class="fas fa-beer"></i> Beer</h3>
-
-            <!-- Beer Strength Selector -->
-            <div class="beer-strength-selector">
-              <label for="beerStrength">Beer Strength:</label>
-              <select id="beerStrength" onchange="updateBeerStrength()">
-                <option value="light">Light Beer (3.5% ABV)</option>
-                <option value="regular" selected>Regular Beer (5% ABV)</option>
-                <option value="strong">Strong Beer (7% ABV)</option>
-              </select>
-            </div>
-
-            <div class="drink-options">
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">Small Beer</span>
-                  <span class="drink-volume" id="small-volume"
-                    >(330ml, 5% ABV)</span
-                  >
-                </div>
-                <div class="counter">
-                  <button class="counter-btn" onclick="decrementDrink('small')">
-                    -
-                  </button>
-                  <span class="counter-value" id="small-count">0</span>
-                  <button class="counter-btn" onclick="incrementDrink('small')">
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">Full Beer</span>
-                  <span class="drink-volume" id="full-volume"
-                    >(650ml, 5% ABV)</span
-                  >
-                </div>
-                <div class="counter">
-                  <button class="counter-btn" onclick="decrementDrink('full')">
-                    -
-                  </button>
-                  <span class="counter-value" id="full-count">0</span>
-                  <button class="counter-btn" onclick="incrementDrink('full')">
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">Pitcher</span>
-                  <span class="drink-volume" id="pitcher-volume"
-                    >(1.5L, 5% ABV)</span
-                  >
-                </div>
-                <div class="counter">
-                  <button
-                    class="counter-btn"
-                    onclick="decrementDrink('pitcher')"
-                  >
-                    -
-                  </button>
-                  <span class="counter-value" id="pitcher-count">0</span>
-                  <button
-                    class="counter-btn"
-                    onclick="incrementDrink('pitcher')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
+          <span class="field-label" id="sex-label">Body type</span>
+          <div class="segmented" role="radiogroup" aria-labelledby="sex-label">
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              data-sex="male"
+            >
+              Male
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              data-sex="female"
+            >
+              Female
+            </button>
           </div>
+          <p class="field-hint">
+            Saved on this phone only, so you won't need to enter it again.
+          </p>
 
-          <!-- Spirits Category -->
-          <div class="alcohol-category">
-            <h3>
-              <i class="fas fa-glass-whiskey"></i> Whiskey/Vodka/Rum/Brandy
-            </h3>
-            <div class="drink-options">
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">30ml Shot</span>
-                  <span class="drink-volume">(30ml, 40% ABV)</span>
-                </div>
-                <div class="counter">
-                  <button
-                    class="counter-btn"
-                    onclick="decrementDrink('shot30')"
-                  >
-                    -
-                  </button>
-                  <span class="counter-value" id="shot30-count">0</span>
-                  <button
-                    class="counter-btn"
-                    onclick="incrementDrink('shot30')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">60ml Shot</span>
-                  <span class="drink-volume">(60ml, 40% ABV)</span>
-                </div>
-                <div class="counter">
-                  <button
-                    class="counter-btn"
-                    onclick="decrementDrink('shot60')"
-                  >
-                    -
-                  </button>
-                  <span class="counter-value" id="shot60-count">0</span>
-                  <button
-                    class="counter-btn"
-                    onclick="incrementDrink('shot60')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">90ml Shot</span>
-                  <span class="drink-volume">(90ml, 40% ABV)</span>
-                </div>
-                <div class="counter">
-                  <button
-                    class="counter-btn"
-                    onclick="decrementDrink('shot90')"
-                  >
-                    -
-                  </button>
-                  <span class="counter-value" id="shot90-count">0</span>
-                  <button
-                    class="counter-btn"
-                    onclick="incrementDrink('shot90')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">Quarter Bottle</span>
-                  <span class="drink-volume">(180ml, 40% ABV)</span>
-                </div>
-                <div class="counter">
-                  <button
-                    class="counter-btn"
-                    onclick="decrementDrink('quarter')"
-                  >
-                    -
-                  </button>
-                  <span class="counter-value" id="quarter-count">0</span>
-                  <button
-                    class="counter-btn"
-                    onclick="incrementDrink('quarter')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">Half Bottle</span>
-                  <span class="drink-volume">(375ml, 40% ABV)</span>
-                </div>
-                <div class="counter">
-                  <button class="counter-btn" onclick="decrementDrink('half')">
-                    -
-                  </button>
-                  <span class="counter-value" id="half-count">0</span>
-                  <button class="counter-btn" onclick="incrementDrink('half')">
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div class="drink-option">
-                <div class="drink-info">
-                  <span class="drink-name">Full Bottle</span>
-                  <span class="drink-volume">(750ml, 40% ABV)</span>
-                </div>
-                <div class="counter">
-                  <button
-                    class="counter-btn"
-                    onclick="decrementDrink('fullBottle')"
-                  >
-                    -
-                  </button>
-                  <span class="counter-value" id="fullBottle-count">0</span>
-                  <button
-                    class="counter-btn"
-                    onclick="incrementDrink('fullBottle')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Calculate Button -->
-        <section class="section">
-          <button class="calculate-btn" onclick="calculateBAC()">
-            <i class="fas fa-calculator"></i> Calculate BAC
+          <button type="button" class="btn btn-primary" id="save-profile">
+            Done
           </button>
-        </section>
+        </div>
+      </section>
 
-        <!-- Results Section -->
-        <section
-          class="section results-section"
-          id="results"
-          style="display: none"
-        >
-          <h2><i class="fas fa-chart-line"></i> Results</h2>
-          <div class="results-grid">
-            <div class="result-card">
-              <div class="result-label">Current BAC</div>
-              <div class="result-value" id="bac-value">0.00%</div>
-            </div>
-            <div class="result-card">
-              <div class="result-label">Legal Status</div>
-              <div class="result-value" id="legal-status">Safe</div>
-            </div>
-            <div class="result-card">
-              <div class="result-label">Time to Sober</div>
-              <div class="result-value" id="sober-time">0 hours</div>
-            </div>
-          </div>
-          <div class="warning-box" id="warning-box" style="display: none">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span id="warning-text"></span>
-          </div>
-        </section>
+      <!-- Step 2: When did you start -->
+      <section class="card" id="timing" aria-labelledby="timing-title">
+        <div class="step-head">
+          <span class="step-num" aria-hidden="true">2</span>
+          <h2 id="timing-title">When was your first drink?</h2>
+        </div>
 
-        <!-- Legal Disclaimer -->
-        <section class="section disclaimer">
-          <h3><i class="fas fa-info-circle"></i> Legal Disclaimer</h3>
+        <div class="stepper stepper-time">
+          <button
+            type="button"
+            class="step-btn"
+            data-ago-step="-1"
+            aria-label="30 minutes more recent"
+          >
+            −
+          </button>
+          <div class="stepper-value stepper-value-col">
+            <output id="ago-value" aria-live="polite">Just now</output>
+            <span class="sub" id="ago-clock"></span>
+          </div>
+          <button
+            type="button"
+            class="step-btn"
+            data-ago-step="1"
+            aria-label="30 minutes earlier"
+          >
+            +
+          </button>
+        </div>
+
+        <div class="chips" role="group" aria-label="Quick pick">
+          <button type="button" class="chip" data-ago="0">Just now</button>
+          <button type="button" class="chip" data-ago="1">1 h ago</button>
+          <button type="button" class="chip" data-ago="2">2 h ago</button>
+          <button type="button" class="chip" data-ago="3">3 h ago</button>
+          <button type="button" class="chip" data-ago="4">4 h ago</button>
+          <button type="button" class="chip" data-ago="6">6 h ago</button>
+        </div>
+        <p class="field-hint">
+          Not sure? Pick the more recent time — it's the safer guess.
+        </p>
+      </section>
+
+      <!-- Step 3: Drinks -->
+      <section class="card" id="drinks" aria-labelledby="drinks-title">
+        <div class="step-head">
+          <span class="step-num" aria-hidden="true">3</span>
+          <h2 id="drinks-title">What did you drink?</h2>
+        </div>
+        <p class="field-hint lead-hint">
+          Tap a drink <strong>once for each one</strong> you had.
+        </p>
+
+        <div class="category">
+          <h3 class="category-title">
+            <span aria-hidden="true">🍺</span> Beer
+          </h3>
+          <div
+            class="segmented segmented-small"
+            role="radiogroup"
+            aria-label="Beer strength"
+          >
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              data-strength="light"
+            >
+              Light <small>3.5%</small>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked="true"
+              data-strength="regular"
+            >
+              Regular <small>5%</small>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              data-strength="strong"
+            >
+              Strong <small>7%</small>
+            </button>
+          </div>
+          <div class="drink-grid" data-category="beer"></div>
+        </div>
+
+        <div class="category">
+          <h3 class="category-title">
+            <span aria-hidden="true">🥃</span> Whisky · Vodka · Rum · Brandy
+          </h3>
+          <div class="drink-grid" data-category="spirits"></div>
+        </div>
+
+        <div class="category">
+          <h3 class="category-title">
+            <span aria-hidden="true">🍷</span> Wine &amp; others
+          </h3>
+          <div class="drink-grid" data-category="other"></div>
+        </div>
+
+        <div class="drink-total" id="drink-total"></div>
+
+        <button type="button" class="btn btn-ghost" id="reset">
+          Start over
+        </button>
+      </section>
+
+      <!-- Getting home -->
+      <section class="card get-home" id="get-home" aria-labelledby="home-title">
+        <h2 id="home-title">
+          <span aria-hidden="true">🏠</span> Get home safe
+        </h2>
+        <p class="field-hint">Leave the car. It'll be there tomorrow.</p>
+        <div class="ride-grid">
+          <a
+            class="btn btn-ride"
+            href="https://m.uber.com/ul/"
+            target="_blank"
+            rel="noopener"
+            >Uber</a
+          >
+          <a
+            class="btn btn-ride"
+            href="https://book.olacabs.com/"
+            target="_blank"
+            rel="noopener"
+            >Ola</a
+          >
+          <a
+            class="btn btn-ride"
+            href="https://www.rapido.bike/"
+            target="_blank"
+            rel="noopener"
+            >Rapido</a
+          >
+        </div>
+        <button type="button" class="btn btn-secondary" id="ask-friend">
+          <span aria-hidden="true">💬</span> Ask a friend for a ride
+        </button>
+
+        <details class="emergency">
+          <summary>Someone feeling very unwell?</summary>
           <p>
-            This calculator provides estimates only and should not be used as
-            the sole basis for determining whether it's safe to drive. BAC can
-            vary based on many factors including food consumption, medications,
-            and individual metabolism. Always follow local laws and drink
-            responsibly.
+            Get help immediately if someone can't be woken up, is confused,
+            vomiting repeatedly, breathing slowly, has a seizure or has pale or
+            bluish skin. Don't leave them alone, and lay them on their side.
           </p>
-          <p>
-            <strong>India Legal Limit:</strong> 0.03% BAC (30mg/100ml blood)
-          </p>
-        </section>
-      </main>
+          <div class="ride-grid ride-grid-2">
+            <a class="btn btn-danger" href="tel:108">Call 108 (Ambulance)</a>
+            <a class="btn btn-danger" href="tel:112">Call 112 (Emergency)</a>
+          </div>
+        </details>
+      </section>
+
+      <section class="card disclaimer" aria-labelledby="disclaimer-title">
+        <h2 id="disclaimer-title">This is an estimate</h2>
+        <p>
+          Uses the Widmark formula and an average burn-off of 0.015% BAC per
+          hour. Your real level can be higher because of food, medicines,
+          health, how fast you drank and your body. It can't tell you that
+          you're safe to drive — <strong>when in doubt, don't drive.</strong>
+        </p>
+        <p>
+          India's legal limit is 0.03% BAC (30 mg alcohol per 100 ml blood).
+        </p>
+      </section>
+
       <footer class="footer">
-        &copy; <span id="copyright-year"></span> BAC Calculator. All rights
-        reserved.
+        &copy; <span id="copyright-year"></span> BAC Calculator · Your data
+        stays on your device
       </footer>
+    </main>
+
+    <!-- Bottom dock: undo toast + mini status -->
+    <div class="dock" aria-live="polite">
+      <div class="toast" id="toast" role="status" hidden>
+        <span id="toast-text"></span>
+        <button type="button" class="toast-undo" id="toast-undo">Undo</button>
+      </div>
+      <button type="button" class="statusbar" id="statusbar" hidden>
+        <span class="statusbar-dot" aria-hidden="true"></span>
+        <span id="statusbar-text"></span>
+        <span class="statusbar-cta" aria-hidden="true">↑</span>
+      </button>
     </div>
 
     <script src="script.js"></script>
-    <script>
-      // Set copyright year dynamically
-      document.getElementById("copyright-year").textContent =
-        new Date().getFullYear();
-    </script>
   </body>
 </html>
