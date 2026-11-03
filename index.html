@@ -14,6 +14,18 @@
       content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
     />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+
+    <!-- Installed app (iOS reads these; Android uses the manifest) -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Can I Drive?" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="styles.css" />
 
     <meta property="og:title" content="Can I Drive? — BAC Calculator India" />
@@ -54,6 +66,15 @@
         aria-atomic="true"
         tabindex="-1"
       ></section>
+
+      <!-- "Install the app" prompt (can be snoozed) -->
+      <div
+        class="install-banner"
+        id="install-banner"
+        role="region"
+        aria-label="Install the app"
+        hidden
+      ></div>
 
       <!-- Step 1: About you -->
       <section class="card" id="profile" aria-labelledby="profile-title">
@@ -292,6 +313,19 @@
             <a class="btn btn-danger" href="tel:112">Call 112 (Emergency)</a>
           </div>
         </details>
+      </section>
+
+      <!-- Always-available install instructions (no snooze) -->
+      <section
+        class="card install-card"
+        id="install-card"
+        aria-labelledby="install-title"
+        hidden
+      >
+        <h2 id="install-title">
+          <span aria-hidden="true">📲</span> Keep it on your phone
+        </h2>
+        <div class="install-body" id="install-card-body"></div>
       </section>
 
       <section class="card disclaimer" aria-labelledby="disclaimer-title">

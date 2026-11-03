@@ -762,11 +762,202 @@ function initApp() {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 }
 
+/* ------------------------------------------------------------------ *
+ * Installable app (PWA): install prompt + offline support
+ * ------------------------------------------------------------------ */
+
+// iOS share icon (square with an arrow), so people know what to look for.
+const SHARE_ICON_SVG =
+  '<svg class="share-glyph" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">' +
+  '<path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+  '<path d="M8 10H6.5A1.5 1.5 0 0 0 5 11.5v8A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 17.5 10H16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+  '</svg>';
+
+function setupInstall() {
+  const SNOOZE_KEY = 'installSnoozedAt';
+  const SNOOZE_DAYS = 14;
+
+  const ua = navigator.userAgent || '';
+  const isIOS =
+    /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  // Instagram, Facebook etc. open links in a built-in browser that can't install apps.
+  const isInAppBrowser = /FBAN|FBAV|Instagram|Line\/|LinkedInApp|Snapchat|; wv\)/i.test(ua);
+  const isMobile = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  const isStandalone = () =>
+    !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+    navigator.standalone === true;
+
+  let deferredPrompt = null;
+  let justInstalled = false;
+
+  const snoozed = () => {
+    try {
+      return Date.now() - Number(localStorage.getItem(SNOOZE_KEY) || 0) < SNOOZE_DAYS * 864e5;
+    } catch (e) {
+      return false;
+    }
+  };
+  const snooze = () => {
+    try {
+      localStorage.setItem(SNOOZE_KEY, String(Date.now()));
+    } catch (e) {
+      /* ignore */
+    }
+  };
+
+  // Which install path applies to this browser.
+  function installKind() {
+    if (isInAppBrowser) return 'inApp';
+    if (deferredPrompt) return 'prompt';
+    if (isIOS) return 'ios';
+    return 'other';
+  }
+
+  const IOS_STEPS = `
+    <ol class="install-steps">
+      <li>Tap the <strong>Share</strong> button ${SHARE_ICON_SVG}</li>
+      <li>Tap <strong>Add to Home Screen</strong> (scroll down if you don't see it)</li>
+      <li>Tap <strong>Add</strong></li>
+    </ol>`;
+
+  const COPY = {
+    prompt: 'Opens in one tap from your home screen and works with no internet.',
+    ios: `Tap ${SHARE_ICON_SVG} <strong>Share</strong>, then <strong>Add to Home Screen</strong>.`,
+    inApp: 'You\'re inside another app. Tap <strong>⋮</strong> or <strong>···</strong>, choose <strong>Open in browser</strong>, then install from there.',
+    other: 'Open your browser menu and choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.',
+  };
+
+  function renderBanner() {
+    const el = document.getElementById('install-banner');
+    if (!el) return;
+    const kind = installKind();
+    const canShow =
+      !isStandalone() &&
+      !justInstalled &&
+      !snoozed() &&
+      (kind === 'prompt' || kind === 'ios' || (kind === 'inApp' && isMobile));
+    el.hidden = !canShow;
+    if (!canShow) {
+      el.innerHTML = '';
+      return;
+    }
+    el.innerHTML = `
+      <div class="ib-row">
+        <img src="icons/icon-192.png" alt="" width="48" height="48" />
+        <div class="ib-text">
+          <strong>Install the app</strong>
+          <span>${COPY[kind]}</span>
+        </div>
+      </div>
+      <div class="ib-actions">
+        ${kind === 'prompt' ? '<button type="button" class="btn btn-primary" data-install="go">Install</button>' : ''}
+        <button type="button" class="btn btn-secondary" data-install="later">Not now</button>
+      </div>`;
+  }
+
+  function renderCard() {
+    const card = document.getElementById('install-card');
+    const body = document.getElementById('install-card-body');
+    if (!card || !body) return;
+    if (isStandalone()) {
+      card.hidden = true; // already using the app
+      return;
+    }
+    card.hidden = false;
+    if (justInstalled) {
+      body.innerHTML = '<p class="install-done">✓ Installed. Open it from your home screen.</p>';
+      return;
+    }
+    const kind = installKind();
+    const lead =
+      '<p class="field-hint">Install it now, while you\'re clear-headed, so it\'s one tap away later. It works without internet.</p>';
+    let html = lead;
+    if (kind === 'prompt') {
+      html += '<button type="button" class="btn btn-primary" data-install="go">📲 Install app</button>';
+    } else if (kind === 'ios') {
+      html += IOS_STEPS;
+    } else {
+      html += `<p class="install-text">${COPY[kind]}</p>`;
+    }
+    body.innerHTML = html;
+  }
+
+  function render() {
+    renderBanner();
+    renderCard();
+  }
+
+  async function promptInstall() {
+    if (!deferredPrompt) return;
+    const promptEvent = deferredPrompt;
+    deferredPrompt = null; // a prompt can only be used once
+    promptEvent.prompt(); // must run inside the tap
+    try {
+      const { outcome } = await promptEvent.userChoice;
+      if (outcome === 'dismissed') snooze();
+    } catch (e) {
+      /* ignore */
+    }
+    render();
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); // use our own button instead of the browser's mini-bar
+    deferredPrompt = e;
+    render();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    justInstalled = true;
+    render();
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('[data-install]');
+    if (!btn) return;
+    if (btn.dataset.install === 'go') promptInstall();
+    else {
+      snooze();
+      render();
+    }
+  });
+
+  if (window.matchMedia) {
+    const mq = window.matchMedia('(display-mode: standalone)');
+    if (mq.addEventListener) mq.addEventListener('change', render);
+  }
+
+  return { render };
+}
+
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {
+      /* offline support is a bonus; the app works without it */
+    });
+  });
+}
+
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-  } else {
+  // Listen for the install prompt as early as possible.
+  const install = setupInstall();
+  registerServiceWorker();
+
+  const boot = () => {
     initApp();
+    install.render();
+    // Home-screen shortcuts open "./#drinks" etc. Jump there once the page is built.
+    if (location.hash.length > 1) {
+      const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (target) target.scrollIntoView();
+    }
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 }
 

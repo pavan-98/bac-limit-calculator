@@ -17,6 +17,24 @@ People open this app when they've been drinking, so the UI is built for shaky th
 - **Get home safe.** Ride links (Uber, Ola, Rapido), a one-tap "Ask a friend for a ride" message (Web Share or WhatsApp), and emergency numbers 108 and 112 with signs of alcohol poisoning.
 - **Bottom status bar.** While you scroll through drinks, a compact bar shows your status and jumps back to the answer.
 
+## Install as an app (PWA)
+
+The site can be installed to the home screen and then opens full-screen like a normal app, **even with no internet**. That matters in bars and basements with bad signal.
+
+- **Android (Chrome, Edge, Samsung Internet):** an **Install the app** banner appears under the answer card. **Install** opens the browser's own install dialog.
+- **iPhone / iPad:** the banner shows how to do it: tap **Share**, then **Add to Home Screen**. iOS has no install button that a website can trigger.
+- **Instagram, Facebook and other in-app browsers** can't install apps, so the banner tells people to open the page in their real browser.
+- **Not now** hides the banner for 14 days. The **Keep it on your phone** card near the bottom always shows the install steps, and disappears once you're using the installed app.
+- **Home-screen shortcuts** (long-press the icon on Android): *Add a drink* and *Get home safe*.
+
+How it works:
+
+- `manifest.webmanifest`: app name, colours, icons (including a maskable one for Android's round icons), shortcuts and screenshots for Android's install sheet.
+- `sw.js`: a service worker that caches the app. It tries the network first so updates arrive straight away, but uses the cached copy if the network fails or takes more than 3 seconds. When you change which files the app needs, update `SHELL` and bump `CACHE`.
+- `icons/`: PNG icons generated from the artwork in `icons/make-icons.js` (`node icons/make-icons.js icons`, needs Playwright). The same script also rewrites `favicon.svg`.
+
+To check installability, open Chrome DevTools → **Application → Manifest**. Installing needs HTTPS (Vercel provides it) or `http://localhost`. It won't work when `index.html` is opened as a file.
+
 ## Drinks
 
 | Category | Options |
@@ -65,17 +83,22 @@ BAC = (Alcohol in grams / (Body weight × Body water ratio)) × 100
 ## Installation
 
 1. Clone or download the repository
-2. Open `index.html` in a web browser
-3. No additional setup required - no external dependencies, works offline
+2. Open `index.html` in a web browser, or serve the folder (for example `npx serve .`) to test installing and offline mode
+3. No build step and no external dependencies
 
 ## Files Structure
 
 ```
 bac-limit-calculator/
-├── index.html          # Main HTML structure
-├── styles.css          # CSS styling and responsive design
-├── script.js           # JavaScript logic and BAC calculations
-└── README.md          # This documentation file
+├── index.html             # Main HTML structure
+├── styles.css             # CSS styling and responsive design
+├── script.js              # BAC calculations, UI and install prompt
+├── sw.js                  # Service worker (offline support)
+├── manifest.webmanifest   # Makes the site installable
+├── favicon.svg            # Tab icon
+├── icons/                 # App icons + generator script
+├── screens/               # Screenshots for the install sheet
+└── README.md              # This documentation file
 ```
 
 ## Browser Compatibility

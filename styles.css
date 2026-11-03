@@ -30,6 +30,7 @@
   --tap: 56px;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
 
   color-scheme: dark;
 }
@@ -149,7 +150,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-top: 14px;
+  padding-top: calc(14px + var(--safe-top));
   padding-bottom: 10px;
 }
 
@@ -847,6 +848,90 @@ button {
   color: var(--muted);
   font-size: 0.85rem;
   padding: 8px 0 0;
+}
+
+/* ---------- install the app ---------- */
+
+.install-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 2px solid var(--accent);
+}
+.ib-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ib-row img {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+.ib-text {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+.ib-text strong {
+  display: block;
+  color: var(--text);
+  font-size: 1.1rem;
+}
+.ib-text span strong {
+  display: inline;
+  font-size: inherit;
+}
+.ib-actions {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 10px;
+}
+
+.share-glyph {
+  display: inline-block;
+  vertical-align: -4px;
+  color: var(--accent);
+}
+
+.install-card h2 {
+  margin-bottom: 2px;
+}
+.install-card .btn {
+  margin-top: 16px;
+}
+.install-text {
+  margin-top: 12px;
+}
+.install-steps {
+  margin: 14px 0 0;
+  padding-left: 1.4em;
+  display: grid;
+  gap: 8px;
+}
+.install-steps li::marker {
+  font-weight: 800;
+  color: var(--accent);
+}
+.install-done {
+  font-weight: 800;
+  color: var(--ok);
+}
+
+/* Only when running as the installed app */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+  }
+  .footer {
+    padding-bottom: var(--safe-bottom);
+  }
 }
 
 /* ---------- bottom dock ---------- */
