@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bac-calculator-rho.vercel.app/sitemap.xml

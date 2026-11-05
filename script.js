@@ -519,13 +519,13 @@ function initApp() {
     if (r.state === 'needProfile') {
       html = `
         <p class="hero-kicker">Had a few drinks?</p>
-        <h1 class="hero-question">When can I drive?</h1>
+        <h2 class="hero-question">When can I drive?</h2>
         <p class="hero-lead">Answer 3 quick things and we'll tell you the time it's legal to drive again.</p>
         <button type="button" class="btn btn-primary btn-xl" data-goto="profile">Start — enter your weight</button>`;
     } else if (r.state === 'needDrinks') {
       html = `
         <p class="hero-kicker">Almost there</p>
-        <h1 class="hero-question">What did you drink?</h1>
+        <h2 class="hero-question">What did you drink?</h2>
         <p class="hero-lead">Tap each drink you had below. Your answer updates instantly.</p>
         <button type="button" class="btn btn-primary btn-xl" data-goto="drinks">Add my drinks ↓</button>`;
     } else {

@@ -1,5 +1,5 @@
 // Regenerates the app icons and favicon.svg.
-// Usage (from the repo root): node icons/make-icons.js icons   (needs Playwright)
+// Usage (from the repo root): node scripts/make-icons.js icons   (needs Playwright)
 const { chromium } = require('playwright');
 const out = process.argv[2];
 // Artwork on a 64x64 grid: a tumbler of whisky with a clock badge ("when can I drive?")

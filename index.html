@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -8,10 +8,15 @@
     />
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0b0d12" />
-    <title>Can I Drive? — BAC Calculator India</title>
+    <title>BAC Calculator India: When Can I Drive After Drinking?</title>
     <meta
       name="description"
-      content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
+      content="Free BAC calculator for India's 0.03% drink-driving limit. Tap the beers, pegs or wine you had and see the exact time you can legally drive again."
+    />
+    <link rel="canonical" href="https://bac-calculator-rho.vercel.app/" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1"
     />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
@@ -28,29 +33,127 @@
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="styles.css" />
 
-    <meta property="og:title" content="Can I Drive? — BAC Calculator India" />
+    <!-- Link previews (WhatsApp, Facebook, LinkedIn, X/Twitter, Slack...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Can I Drive?" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:url" content="https://bac-calculator-rho.vercel.app/" />
+    <meta property="og:title" content="Can I Drive? — BAC calculator for India" />
     <meta
       property="og:description"
-      content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
+      content="Had a few drinks? Tap what you had and see the exact time you'll be under India's 0.03% limit. Free, no sign-up, works offline."
     />
-    <meta property="og:image" content="breath.jpg" />
-    <meta property="og:url" content="https://bac-calculator-rho.vercel.app/" />
+    <meta
+      property="og:image"
+      content="https://bac-calculator-rho.vercel.app/og-image.jpg"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Can I Drive? app showing 'Don't drive — you can drive after 1:25 AM'"
+    />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Can I Drive? — BAC Calculator India" />
+    <meta name="twitter:title" content="Can I Drive? — BAC calculator for India" />
     <meta
       name="twitter:description"
-      content="Had a few drinks? Find out when you'll be under India's 0.03% BAC limit. Big buttons, plain answers, no sign-up."
+      content="Had a few drinks? Tap what you had and see the exact time you'll be under India's 0.03% limit. Free, no sign-up, works offline."
     />
-    <meta name="twitter:image" content="breath.jpg" />
+    <meta
+      name="twitter:image"
+      content="https://bac-calculator-rho.vercel.app/og-image.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Can I Drive? app showing 'Don't drive — you can drive after 1:25 AM'"
+    />
+
+    <!-- Structured data for search engines. Keep the FAQ text in sync with the FAQ section below. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "@id": "https://bac-calculator-rho.vercel.app/#app",
+            "name": "Can I Drive?",
+            "alternateName": "BAC Calculator India",
+            "url": "https://bac-calculator-rho.vercel.app/",
+            "description": "Free BAC calculator for India's 0.03% drink-driving limit. Tap the drinks you had and see the time you can legally drive again.",
+            "applicationCategory": "HealthApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "inLanguage": "en-IN",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "INR"
+            },
+            "image": "https://bac-calculator-rho.vercel.app/og-image.jpg",
+            "screenshot": "https://bac-calculator-rho.vercel.app/screens/phone.png"
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://bac-calculator-rho.vercel.app/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is the legal alcohol limit for driving in India?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "30 mg of alcohol per 100 ml of blood, which is 0.03% BAC. It's set by Section 185 of the Motor Vehicles Act, 1988, and police check it with a breath analyser. That's stricter than the 0.08% limit in many other countries. A first offence can mean a fine of up to ₹10,000, up to 6 months in jail, or both, and your licence can be suspended."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How many drinks can I have and still drive?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Very few, often none. By this calculator's estimate, a 70 kg man is over 0.03% straight after one large peg (60 ml of whisky) or one 650 ml bottle of beer, and a 55 kg woman is over after a single 330 ml beer. The only number that's always safe is zero."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How long does it take to get under the limit?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "On average your body clears about 0.015% BAC per hour, and nothing speeds that up: not coffee, a cold shower or eating after you drink. So at 0.06% (twice the limit) it takes about 2 hours to get under 0.03%, and about 4 hours for the alcohol to be gone."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How accurate is this calculator?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It's an estimate. It uses the Widmark formula with an average burn-off rate. Your real level can be higher because of food, medicines, your health, your body and how fast you drank. Treat the time it shows as a rough guide, not a guarantee, and when in doubt, don't drive."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my data saved anywhere?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Only on your own phone. Nothing is sent to a server, there's no sign-up, and once the page has loaded it works offline."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#drinks">Skip to drinks</a>
 
     <header class="topbar">
-      <div class="brand">
+      <h1 class="brand">
         <img src="favicon.svg" alt="" width="28" height="28" />
-        <span>Can I Drive?</span>
-      </div>
+        <span class="brand-text"
+          >Can I Drive?<small> BAC calculator for India</small></span
+        >
+      </h1>
       <span class="limit-pill" title="India legal limit: 30 mg per 100 ml blood"
         >India limit <strong>0.03%</strong></span
       >
@@ -65,7 +168,19 @@
         aria-live="polite"
         aria-atomic="true"
         tabindex="-1"
-      ></section>
+      >
+        <p class="hero-kicker">Had a few drinks?</p>
+        <h2 class="hero-question">When can I drive?</h2>
+        <p class="hero-lead">
+          Answer 3 quick things and we'll tell you the time it's legal to drive
+          again.
+        </p>
+        <noscript>
+          <p class="hero-lead">
+            <strong>Turn on JavaScript to use the calculator.</strong>
+          </p>
+        </noscript>
+      </section>
 
       <!-- "Install the app" prompt (can be snoozed) -->
       <div
@@ -312,6 +427,31 @@
             <a class="btn btn-danger" href="tel:108">Call 108 (Ambulance)</a>
             <a class="btn btn-danger" href="tel:112">Call 112 (Emergency)</a>
           </div>
+        </details>
+      </section>
+
+      <!-- FAQ (also in the JSON-LD in <head>) -->
+      <section class="card faq" id="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Questions</h2>
+        <details class="faq-item">
+          <summary><h3>What is the legal alcohol limit for driving in India?</h3></summary>
+          <p>30 mg of alcohol per 100 ml of blood, which is 0.03% BAC. It&#x27;s set by Section 185 of the Motor Vehicles Act, 1988, and police check it with a breath analyser. That&#x27;s stricter than the 0.08% limit in many other countries. A first offence can mean a fine of up to ₹10,000, up to 6 months in jail, or both, and your licence can be suspended.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>How many drinks can I have and still drive?</h3></summary>
+          <p>Very few, often none. By this calculator&#x27;s estimate, a 70 kg man is over 0.03% straight after one large peg (60 ml of whisky) or one 650 ml bottle of beer, and a 55 kg woman is over after a single 330 ml beer. The only number that&#x27;s always safe is zero.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>How long does it take to get under the limit?</h3></summary>
+          <p>On average your body clears about 0.015% BAC per hour, and nothing speeds that up: not coffee, a cold shower or eating after you drink. So at 0.06% (twice the limit) it takes about 2 hours to get under 0.03%, and about 4 hours for the alcohol to be gone.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>How accurate is this calculator?</h3></summary>
+          <p>It&#x27;s an estimate. It uses the Widmark formula with an average burn-off rate. Your real level can be higher because of food, medicines, your health, your body and how fast you drank. Treat the time it shows as a rough guide, not a guarantee, and when in doubt, don&#x27;t drive.</p>
+        </details>
+        <details class="faq-item">
+          <summary><h3>Is my data saved anywhere?</h3></summary>
+          <p>Only on your own phone. Nothing is sent to a server, there&#x27;s no sign-up, and once the page has loaded it works offline.</p>
         </details>
       </section>
 

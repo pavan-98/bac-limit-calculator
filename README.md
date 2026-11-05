@@ -31,9 +31,18 @@ How it works:
 
 - `manifest.webmanifest`: app name, colours, icons (including a maskable one for Android's round icons), shortcuts and screenshots for Android's install sheet.
 - `sw.js`: a service worker that caches the app. It tries the network first so updates arrive straight away, but uses the cached copy if the network fails or takes more than 3 seconds. When you change which files the app needs, update `SHELL` and bump `CACHE`.
-- `icons/`: PNG icons generated from the artwork in `icons/make-icons.js` (`node icons/make-icons.js icons`, needs Playwright). The same script also rewrites `favicon.svg`.
+- `icons/`: PNG icons generated from the artwork in `scripts/make-icons.js` (`node scripts/make-icons.js icons`, needs Playwright). The same script also rewrites `favicon.svg`.
 
 To check installability, open Chrome DevTools → **Application → Manifest**. Installing needs HTTPS (Vercel provides it) or `http://localhost`. It won't work when `index.html` is opened as a file.
+
+## Sharing & SEO
+
+- **Link previews:** `og-image.jpg` (1200×630) is the picture shown when the link is shared on WhatsApp, X/Twitter, Facebook, LinkedIn or Slack. Open Graph and Twitter tags use absolute URLs, because many apps ignore relative ones. To change the picture, edit `scripts/make-og-image.js` and run `node scripts/make-og-image.js`.
+- **Search:** keyword-focused title and description, a canonical URL, an `<h1>`, a first screen that's readable without JavaScript, a visible FAQ, and JSON-LD structured data (`WebApplication` + `FAQPage`). If you edit the FAQ, change the JSON-LD in `<head>` to match.
+- **Crawling:** `robots.txt` allows everything and points to `sitemap.xml`. Update `<lastmod>` in the sitemap when the content changes.
+- **If the site moves to a new domain:** update the canonical link, the `og:` and `twitter:` URLs, the JSON-LD, `robots.txt` and `sitemap.xml` (search for `bac-calculator-rho.vercel.app`).
+
+Preview tools: [opengraph.xyz](https://www.opengraph.xyz/), Google's [Rich Results Test](https://search.google.com/test/rich-results), and the [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), which also refreshes Facebook's and WhatsApp's cached preview.
 
 ## Drinks
 
@@ -96,8 +105,12 @@ bac-limit-calculator/
 ├── sw.js                  # Service worker (offline support)
 ├── manifest.webmanifest   # Makes the site installable
 ├── favicon.svg            # Tab icon
-├── icons/                 # App icons + generator script
+├── icons/                 # App icons
 ├── screens/               # Screenshots for the install sheet
+├── og-image.jpg           # Link-preview image (1200×630)
+├── robots.txt             # Crawler rules
+├── sitemap.xml            # Sitemap for search engines
+├── scripts/               # Generators for the icons and og-image.jpg
 └── README.md              # This documentation file
 ```
 

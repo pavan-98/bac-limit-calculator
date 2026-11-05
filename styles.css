@@ -160,7 +160,18 @@ button {
   gap: 10px;
   font-weight: 800;
   font-size: 1.1rem;
+  line-height: 1.15;
   letter-spacing: -0.01em;
+}
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+.brand-text small {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--muted);
 }
 
 .limit-pill {
@@ -826,6 +837,51 @@ button {
 }
 .emergency p {
   margin-top: 8px;
+  font-size: 0.98rem;
+}
+
+/* ---------- FAQ ---------- */
+
+.faq h2 {
+  margin-bottom: 6px;
+}
+.faq-item {
+  border-top: 1px solid var(--border);
+}
+.faq-item:first-of-type {
+  border-top: 0;
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: "+";
+  flex: none;
+  margin-left: auto;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.faq-item[open] summary::after {
+  content: "−";
+}
+.faq-item h3 {
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.faq-item p {
+  padding-bottom: 14px;
+  color: var(--muted);
   font-size: 0.98rem;
 }
 
