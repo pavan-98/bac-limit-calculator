@@ -123,6 +123,19 @@ function formatClock(ts) {
   return new Date(ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 }
 
+// Indian police breathalysers show mg of alcohol per 100 ml of blood.
+// The legal limit (0.03% BAC) is 30 on that scale.
+const METER_LIMIT = Math.round(INDIA_LEGAL_LIMIT * 1000);
+
+// Rounded down so the number never shows 30 while the app says "under the limit".
+function bacToMeter(bac) {
+  return Math.max(0, Math.floor(bac * 1000 + 1e-9));
+}
+
+function meterToBac(reading) {
+  return reading / 1000;
+}
+
 function isValidWeight(w) {
   return typeof w === 'number' && Number.isFinite(w) && w >= 30 && w <= 200;
 }
@@ -489,9 +502,20 @@ function initApp() {
       <div class="gauge" role="img" aria-label="Estimated BAC ${r.bac.toFixed(3)} percent. Legal limit 0.03 percent.">
         <div class="gauge-track">
           <div class="gauge-fill" style="width:${pct.toFixed(1)}%"></div>
-          <div class="gauge-limit" style="left:${limitPct.toFixed(1)}%"><span>limit</span></div>
+          <div class="gauge-limit" style="left:${limitPct.toFixed(1)}%"><span>limit ${METER_LIMIT}</span></div>
         </div>
       </div>`;
+  }
+
+  // What a police breathalyser would roughly show right now.
+  function meterHtml(r) {
+    const reading = bacToMeter(r.bac);
+    return `
+      <a class="meter" href="#police-meter" aria-label="A police breathalyser would show about ${reading}. The limit is ${METER_LIMIT}. Tap to learn more.">
+        <span class="meter-label">A police breathalyser would show about</span>
+        <span class="meter-screen" aria-hidden="true">${reading}</span>
+        <span class="meter-unit" aria-hidden="true">mg/100 ml · limit is ${METER_LIMIT} ›</span>
+      </a>`;
   }
 
   function statsHtml(r) {
@@ -538,6 +562,7 @@ function initApp() {
           <p class="hero-lead">You can drive after</p>
           <p class="hero-time">${formatClock(r.legalAt)}</p>
           <p class="hero-countdown">That's in <strong>${formatDuration(r.legalAt - now)}</strong></p>
+          ${meterHtml(r)}
           ${gaugeHtml(r)}
           ${statsHtml(r)}
           <a class="btn btn-primary btn-xl" href="#get-home">🚕 Get a ride home</a>`;
@@ -549,6 +574,7 @@ function initApp() {
           <p class="hero-lead">Safer to wait until</p>
           <p class="hero-time">${formatClock(r.safeAt)}</p>
           <p class="hero-countdown">That's in <strong>${formatDuration(r.safeAt - now)}</strong></p>
+          ${meterHtml(r)}
           ${gaugeHtml(r)}
           ${statsHtml(r)}
           <a class="btn btn-secondary btn-xl" href="#get-home">🚕 Get a ride home</a>`;
@@ -560,6 +586,7 @@ function initApp() {
           <p class="hero-lead">Alcohol fully gone around</p>
           <p class="hero-time">${formatClock(r.soberAt)}</p>
           <p class="hero-countdown">That's in <strong>${formatDuration(r.soberAt - now)}</strong></p>
+          ${meterHtml(r)}
           ${gaugeHtml(r)}
           ${statsHtml(r)}`;
         bar = `Under the limit`;
@@ -568,6 +595,7 @@ function initApp() {
           <div class="hero-status"><span class="hero-icon" aria-hidden="true">✅</span><span>Sober</span></div>
           <p class="hero-sub">By our estimate, the alcohol has left your blood.</p>
           <p class="hero-lead">Still feel off? Trust that feeling and don't drive.</p>
+          ${meterHtml(r)}
           ${statsHtml(r)}`;
         bar = 'Sober (estimated)';
       }
@@ -588,6 +616,57 @@ function initApp() {
     document.documentElement.dataset.tone = tone;
   }
 
+  /* ---------- "Got a police reading?" converter ---------- */
+
+  function renderMeterCheck() {
+    const input = $('#meter-input');
+    const out = $('#meter-result');
+    if (!input || !out) return;
+    const raw = input.value.trim();
+    out.dataset.tone = '';
+    if (raw === '') {
+      out.innerHTML = '';
+      return;
+    }
+    const reading = Number(raw);
+    if (!Number.isFinite(reading) || reading < 0 || reading > 600) {
+      out.dataset.tone = 'warning';
+      out.innerHTML = '<p>Type the number shown on the meter (0 to 600).</p>';
+      return;
+    }
+
+    const bac = meterToBac(reading);
+    const now = Date.now();
+    const underAt = roundUpTo5Min(now + hoursUntil(bac, INDIA_LEGAL_LIMIT) * HOUR_MS);
+    const goneAt = roundUpTo5Min(now + hoursUntil(bac, 0) * HOUR_MS);
+    const shown = +reading.toFixed(1);
+    let html;
+
+    if (reading === 0) {
+      out.dataset.tone = 'low';
+      html = '<p class="mr-head">0 means no alcohol detected</p>';
+    } else if (bac >= INDIA_LEGAL_LIMIT) {
+      out.dataset.tone = 'danger';
+      html = `
+        <p class="mr-head">Over the limit — don't drive</p>
+        <p>${shown} = <strong>${bac.toFixed(3)}% BAC</strong>, about ${(bac / INDIA_LEGAL_LIMIT).toFixed(1)}× the limit.</p>
+        <p>Under ${METER_LIMIT} around <strong>${formatClock(underAt)}</strong> (in about ${formatDuration(underAt - now)}).
+        Alcohol gone around ${formatClock(goneAt)}.</p>`;
+      if (reading >= 300) {
+        html += `<p class="mr-warn">That's a dangerously high level. If someone is very drowsy, confused or vomiting, <a href="tel:108">call 108</a>.</p>`;
+      }
+    } else {
+      out.dataset.tone = 'low';
+      html = `
+        <p class="mr-head">Under the limit</p>
+        <p>${shown} = <strong>${bac.toFixed(3)}% BAC</strong>. Alcohol gone around <strong>${formatClock(goneAt)}</strong> (in about ${formatDuration(goneAt - now)}).</p>`;
+    }
+    if (reading > 0) {
+      html += '<p class="mr-note">Assumes the test was just now. If you drank in the last hour, the number can still go up.</p>';
+    }
+    out.innerHTML = html;
+  }
+
   let heroVisible = true;
   function updateStatusbarVisibility() {
     const statusbar = $('#statusbar');
@@ -606,6 +685,7 @@ function initApp() {
     renderTiming();
     renderDrinks();
     renderHero(lastResult);
+    renderMeterCheck();
   }
 
   /* ---------- events ---------- */
@@ -732,6 +812,7 @@ function initApp() {
     });
 
     $('#ask-friend').addEventListener('click', askFriend);
+    $('#meter-input').addEventListener('input', renderMeterCheck);
 
     // Show the mini status bar only when the big answer is off screen
     if ('IntersectionObserver' in window) {
@@ -968,6 +1049,8 @@ if (typeof module !== 'undefined' && module.exports) {
     calculateSoberTime,
     getLegalStatus,
     hoursUntil,
+    bacToMeter,
+    meterToBac,
     computeResult,
     drinkAbv,
     formatDuration,

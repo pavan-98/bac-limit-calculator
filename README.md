@@ -17,6 +17,14 @@ People open this app when they've been drinking, so the UI is built for shaky th
 - **Get home safe.** Ride links (Uber, Ola, Rapido), a one-tap "Ask a friend for a ride" message (Web Share or WhatsApp), and emergency numbers 108 and 112 with signs of alcohol poisoning.
 - **Bottom status bar.** While you scroll through drinks, a compact bar shows your status and jumps back to the answer.
 
+## Police breathalyser numbers
+
+Police breathalysers in India show **mg of alcohol per 100 ml of blood**, so the legal limit shows as **30**. To convert, divide by 1,000 to get BAC %: a reading of 205 is 0.205%, about 6.8× the limit.
+
+- The answer card shows what a police meter would read right now (for example "≈ 143 · limit is 30"), and the number drops as time passes.
+- The header pill says **Limit 30 (0.03%)**.
+- The **Police breathalyser readings** section has a table of typical readings and a box where you type a reading (for example 205). It shows the BAC %, how many times over the limit that is, and when you'd be under 30 and fully sober, using the same 15-per-hour average burn-off.
+
 ## Install as an app (PWA)
 
 The site can be installed to the home screen and then opens full-screen like a normal app, **even with no internet**. That matters in bars and basements with bad signal.
