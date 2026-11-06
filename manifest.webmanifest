@@ -31,7 +31,11 @@
     }
   ],
   "screenshots": [
-    { "src": "screens/phone.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "Shows the time it's legal to drive again" },
-    { "src": "screens/desktop.png", "sizes": "1280x800", "type": "image/png", "form_factor": "wide", "label": "Can I Drive? on a laptop" }
+    { "src": "screens/promo-1-answer.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "Shows the exact time you can legally drive again" },
+    { "src": "screens/promo-2-police.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "Converts police breathalyser readings and shows when you will be under 30" },
+    { "src": "screens/promo-3-drinks.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "Tap the beers, pegs or wine you had" },
+    { "src": "screens/promo-4-home.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "Book a cab or ask a friend for a ride" },
+    { "src": "screens/promo-5-under.webp", "sizes": "1080x1920", "type": "image/webp", "form_factor": "narrow", "label": "Counts down to when the alcohol is gone" },
+    { "src": "screens/promo-wide.webp", "sizes": "1920x1080", "type": "image/webp", "form_factor": "wide", "label": "Can I Drive? on a laptop: the exact time you can drive" }
   ]
 }

@@ -37,7 +37,8 @@ The site can be installed to the home screen and then opens full-screen like a n
 
 How it works:
 
-- `manifest.webmanifest`: app name, colours, icons (including a maskable one for Android's round icons), shortcuts and screenshots for Android's install sheet.
+- `manifest.webmanifest`: app name, colours, icons (including a maskable one for Android's round icons), shortcuts and the promo screenshots in Android's install sheet.
+- `screens/`: those promo screenshots. There are five 1080×1920 slides with a headline over the real app in a phone frame, plus one 1920×1080 slide for desktop. To rebuild them after the UI changes, run `node scripts/make-promo-screens.js`. It drives the real app at a fixed time of night, saves WebP files, and prints the manifest entries to paste in.
 - `sw.js`: a service worker that caches the app. It tries the network first so updates arrive straight away, but uses the cached copy if the network fails or takes more than 3 seconds. When you change which files the app needs, update `SHELL` and bump `CACHE`.
 - `icons/`: PNG icons generated from the artwork in `scripts/make-icons.js` (`node scripts/make-icons.js icons`, needs Playwright). The same script also rewrites `favicon.svg`.
 
@@ -114,11 +115,11 @@ bac-limit-calculator/
 ├── manifest.webmanifest   # Makes the site installable
 ├── favicon.svg            # Tab icon
 ├── icons/                 # App icons
-├── screens/               # Screenshots for the install sheet
+├── screens/               # Promo screenshots for the install sheet
 ├── og-image.jpg           # Link-preview image (1200×630)
 ├── robots.txt             # Crawler rules
 ├── sitemap.xml            # Sitemap for search engines
-├── scripts/               # Generators for the icons and og-image.jpg
+├── scripts/               # Generators for the icons, og-image.jpg and promo screenshots
 └── README.md              # This documentation file
 ```
 
